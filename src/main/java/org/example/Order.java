@@ -12,11 +12,11 @@ public class Order {
     private Double totalAmount;
 
     private static int count=0;
-    public Order( Integer userId, Integer restaurantId) {
+    public Order( Integer userId, Integer restaurantId, List<OrderItem> orderItems) {
         this.id = count++;
         this.userId = userId;
         this.restaurantId = restaurantId;
-        this.orderItems = new ArrayList<>();
+        this.orderItems = orderItems;
         this.status = Status.received;
         this.totalAmount = 0.0;
     }
