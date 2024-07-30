@@ -2,6 +2,7 @@ package org.example;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Menu {
     private Integer id;
@@ -36,6 +37,16 @@ public class Menu {
 
     public void setMenuItems(List<MenuItem> menuItems) {
         this.menuItems = menuItems;
+    }
+
+    //add menu items
+    public void add(MenuItem menuItem){
+        menuItems.add(menuItem);
+    }
+
+    //delete Menu Item by Id
+    public void delete(Integer id){
+        menuItems = menuItems.stream().filter(item-> !Objects.equals(item.getId(), id)).toList();
     }
 
     @Override

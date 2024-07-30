@@ -1,14 +1,24 @@
 package org.example;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
 public class Main {
-    public static void main(String[] args) {
+    static BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+
+    public static void main(String[] args) throws IOException {
         Restaurant gourmetCorner = new Restaurant("Gourmet Corner");
         Restaurant tableForTwo = new Restaurant("Table for Two");
+
+        List<Restaurant> restaurants = List.of(
+                gourmetCorner,
+                tableForTwo
+        );
 
         gourmetCorner.getMenu().getMenuItems()
                 .add(new MenuItem(gourmetCorner.getMenu().getId(), "Steak Frites", "Perfectly seasoned steak with crispy fries", 18.75));
@@ -104,5 +114,120 @@ public class Main {
                         List.of(new OrderItem(5)))
         );
 
+        showMainPage(restaurants);
+        bufferedReader.close();
+    }
+
+    private static void showMainPage(List<Restaurant> restaurants) throws IOException {
+        System.out.println("Welcome, how can we help you today?");
+
+        System.out.println("a. Create user.");
+        System.out.println("b. List users by restaurant Id.");
+        System.out.println("c. Show orders by restaurant id.");
+        System.out.println("d. Show orders by status");
+        System.out.println("e. Show orders by users id.");
+        System.out.println("f. Show the menu by restaurant id.");
+        System.out.println("g. Add Menu Item to a restaurant menu.");
+        System.out.println("h. delete Menu Item to a restaurant menu.");
+        System.out.println("i. List Menu Items from a Menu.");
+        System.out.println("j. Add items into the cart.");
+        System.out.println("k. Delete items from the cart.");
+        System.out.println("l. Increment the quantity of items in the cart.");
+        System.out.println("m. Decrement the quantity of items in the cart.");
+        System.out.println("n. Clean the cart.");
+        System.out.println("ñ. submit order from the cart.");
+
+        System.out.println(" ");
+        System.out.println("Insert your selection here: ");
+
+        String line = readLine();
+        switch (line){
+            //Restaurant options
+            case "a":
+                break;
+            case "b":
+                break;
+            case "c":
+                break;
+            case "d":
+                break;
+            case "e":
+                break;
+            //Menu Options
+            case "f":
+                findMenuByRestaurantId(restaurants);
+                break;
+            case "g":
+                addMenuItem(restaurants);
+                break;
+            case "h":
+                deleteMenuItemById(restaurants);
+                break;
+            case "i":
+                listMenuItemById(restaurants);
+                break;
+            case "j":
+                break;
+            case "k":
+                break;
+            case "l":
+                break;
+            case "m":
+                break;
+            case "n":
+                break;
+            case "ñ":
+                break;
+            default:
+                System.out.println("option not available");
+                showMainPage(restaurants);
+        }
+    }
+
+    private static void addMenuItem(List<Restaurant> restaurants) throws IOException {
+        System.out.println("Insert restaurant id: ");
+        String id = readLine();
+        var restaurant = restaurants.stream().filter(x->x.getId()==Integer.parseInt(id)).findFirst();
+        System.out.println("Insert name of new menuitem:");
+        String name = readLine();
+
+        System.out.println("Insert Description: ");
+        String desc = readLine();
+
+        System.out.println("Insert Price: ");
+        String price = readLine();
+
+        restaurant.ifPresent(value -> value.getMenu().add(new MenuItem(value.getMenu().getId(), name, desc, Double.parseDouble(price))));
+        System.out.println(restaurant.get().getMenu().getMenuItems());
+    }
+
+    private static void deleteMenuItemById(List<Restaurant> restaurants) throws IOException {
+        System.out.println("Insert restaurant id: ");
+        String id = readLine();
+        var restaurant = restaurants.stream().filter(x->x.getId()==Integer.parseInt(id)).findFirst();
+
+        System.out.println(restaurant.get().getMenu().getMenuItems());
+        System.out.println("Insert the menu item Id that you want to delete:");
+        String menuItemId = readLine();
+        restaurant.get().getMenu().delete(Integer.parseInt(menuItemId));
+        System.out.println(restaurant.get().getMenu().getMenuItems());
+    }
+
+    private static void listMenuItemById(List<Restaurant> restaurants) throws IOException {
+        System.out.println("Insert restaurant id: ");
+        String id = readLine();
+        var result = restaurants.stream().filter(x->x.getId()==Integer.parseInt(id)).findFirst();
+        result.ifPresent(restaurant -> System.out.println(restaurant.getMenu().getMenuItems()));
+    }
+
+    private static void findMenuByRestaurantId(List<Restaurant> restaurants) throws IOException {
+        System.out.println("Insert restaurant id: ");
+        String id = readLine();
+        var result = restaurants.stream().filter(x->x.getId()==Integer.parseInt(id)).findFirst();
+        result.ifPresent(restaurant -> System.out.println(restaurant.getMenu()));
+    }
+
+    public static String readLine() throws IOException {
+        return bufferedReader.readLine().trim();
     }
 }
