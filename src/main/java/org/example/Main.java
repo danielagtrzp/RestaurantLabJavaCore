@@ -52,7 +52,7 @@ public class Main {
         tableForTwo.getMenu().getMenuItems()
                 .add(new MenuItem(tableForTwo.getMenu().getId(), "Caesar Salad", "Crisp romaine lettuce with Caesar dressing and croutons", 12.00));
 
-        Set<User> usersGourmetCorner= Set.of(
+        gourmetCorner.getUsers().addAll(Set.of(
             new User("John Doe", "johndoe", "johndoe@example.com"),
             new User("Jane Smith", "janesmith", "janesmith@example.com"),
             new User("Alice Johnson", "alicej", "alicej@example.com"),
@@ -63,15 +63,15 @@ public class Main {
             new User("Fiona Clark", "fionaclark", "fiona.clark@example.com"),
             new User("George Wright", "georgew", "george.wright@example.com"),
             new User("Hannah Scott", "hannahscott", "hannah.scott@example.com")
-        );
+        ));
 
-        Set<User> usersTableForTwo = Set.of(
+        tableForTwo.getUsers().addAll(Set.of(
                 new User("Emily Rose", "emilyr", "emily.rose@example.com"),
                 new User("Michael Bay", "michaelb", "michael.bay@example.com"),
                 new User("Sophia Loren", "sophial", "sophia.loren@example.com"),
                 new User("Lucas Grey", "lucasg", "lucas.grey@example.com"),
                 new User("Olivia Wilde", "oliviaw", "olivia.wilde@example.com")
-        );
+        ));
 
 
 
@@ -142,10 +142,12 @@ public class Main {
 
         String line = readLine();
         switch (line){
-            //Restaurant options
+            //User options
             case "a":
+                createUser(restaurants);
                 break;
             case "b":
+                listRestaurantUsers(restaurants);
                 break;
             case "c":
                 break;
@@ -182,6 +184,31 @@ public class Main {
                 System.out.println("option not available");
                 showMainPage(restaurants);
         }
+    }
+
+    private static void listRestaurantUsers(List<Restaurant> restaurants) throws IOException {
+        System.out.println("Insert restaurant id: ");
+        String id = readLine();
+        var restaurant = restaurants.stream().filter(x->x.getId()==Integer.parseInt(id)).findFirst();
+        restaurant.ifPresent(value -> System.out.println(value.getUsers()));
+    }
+
+    private static void createUser(List<Restaurant> restaurants) throws IOException {
+        System.out.println("Insert restaurant id: ");
+        String id = readLine();
+        var restaurant = restaurants.stream().filter(x->x.getId()==Integer.parseInt(id)).findFirst();
+
+        System.out.println("Insert name: ");
+        String name = readLine();
+
+        System.out.println("Insert username: ");
+        String userName = readLine();
+
+        System.out.println("Insert email: ");
+        String email = readLine();
+
+        restaurant.ifPresent(value->value.getUsers().add(new User(name,userName,email)));
+        System.out.println(restaurant.get().getUsers());
     }
 
     private static void addMenuItem(List<Restaurant> restaurants) throws IOException {
